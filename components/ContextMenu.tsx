@@ -24,7 +24,7 @@ export function ContextMenu<FunctionComponent>({ children = null }) {
             >
               <Menu.Items
                 static
-                className="absolute right-0 w-56 origin-top-right bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg outline-none mt-13"
+                className="absolute right-0 origin-top-right bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg outline-none w-96 mt-13"
               >
                 <div className="px-4 py-3">
                   <p className="text-sm leading-5">Signed in as</p>
