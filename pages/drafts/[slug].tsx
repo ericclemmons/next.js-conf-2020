@@ -28,7 +28,8 @@ export default function DraftPage() {
           </div>
         </div>
       </div>
-      <PostPage />;
+
+      <PostPage />
     </>
   );
 }
