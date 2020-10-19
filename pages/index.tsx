@@ -193,7 +193,7 @@ export default function IndexPage({ posts = placeholderPosts }) {
               >
                 <div className="flex-shrink-0">
                   <img
-                    className="object-cover w-full h-48"
+                    className="object-cover w-full h-48 bg-gray-100 shadow-inner"
                     src={`https://source.unsplash.com/featured/480x320/?tech,${post.tags}`}
                     alt=""
                   />

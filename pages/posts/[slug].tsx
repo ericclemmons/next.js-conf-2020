@@ -123,7 +123,10 @@ export default function PostPage({ post = placeholderPost }) {
         <Header>
           <div className="text-center">
             {post.tags.map((tag) => (
-              <h1 className="text-base font-semibold leading-6 tracking-wide text-indigo-600 uppercase">
+              <h1
+                className="text-base font-semibold leading-6 tracking-wide text-indigo-600 uppercase"
+                key={tag}
+              >
                 {tag}
               </h1>
             ))}
@@ -141,7 +144,7 @@ export default function PostPage({ post = placeholderPost }) {
         <div className="mx-auto prose prose-lg text-gray-500">
           <figure>
             <img
-              className="w-full rounded-lg"
+              className="w-full bg-gray-100 rounded-lg shadow-inner"
               src={`https://source.unsplash.com/featured/1080x720/?tech,${post.tags}`}
               alt=""
               width="1310"
