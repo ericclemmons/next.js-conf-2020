@@ -1,3 +1,4 @@
+import { ContextMenu } from "components/ContextMenu";
 import { Hero } from "components/Hero";
 import { PostCard } from "components/PostCard";
 
@@ -46,6 +47,8 @@ const placeholderPosts = [
 export default function IndexPage({ posts = placeholderPosts }) {
   return (
     <>
+      <ContextMenu />
+
       <Hero />
 
       <div className="relative px-4 pt-16 pb-20 bg-gray-50 sm:px-6 lg:pt-24 lg:pb-28 lg:px-8">
@@ -63,7 +66,7 @@ export default function IndexPage({ posts = placeholderPosts }) {
           </div>
           <div className="grid max-w-lg gap-5 mx-auto mt-12 lg:grid-cols-3 lg:max-w-none">
             {posts.map((post) => (
-              <PostCard post={post} />
+              <PostCard key={post.id} post={post} />
             ))}
           </div>
         </div>

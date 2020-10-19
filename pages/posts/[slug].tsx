@@ -1,5 +1,6 @@
-import { Header } from "components/Header";
-import ReactMarkdown from "react-markdown";
+import { Menu } from "@headlessui/react";
+import { ContextMenu } from "components/ContextMenu";
+import { Post } from "components/Post";
 
 const placeholderPost = {
   id: "abc1",
@@ -16,145 +17,62 @@ const placeholderPost = {
 };
 
 export default function PostPage({ post = placeholderPost }) {
+  function publishDraft() {
+    alert("TODO");
+  }
+
+  function convertToDraft() {
+    alert("TODO");
+  }
+
   return (
-    <div className="relative py-16 overflow-hidden bg-white">
-      <div className="hidden lg:block lg:absolute lg:inset-y-0 lg:h-full lg:w-full">
-        <div className="relative h-full mx-auto text-lg max-w-prose">
-          <svg
-            className="absolute transform translate-x-32 top-12 left-full"
-            width="404"
-            height="384"
-            fill="none"
-            viewBox="0 0 404 384"
-          >
-            <defs>
-              <pattern
-                id="74b3fd99-0a6f-4271-bef2-e80eeafdf357"
-                x="0"
-                y="0"
-                width="20"
-                height="20"
-                patternUnits="userSpaceOnUse"
-              >
-                <rect
-                  x="0"
-                  y="0"
-                  width="4"
-                  height="4"
-                  className="text-gray-200"
-                  fill="currentColor"
-                />
-              </pattern>
-            </defs>
-            <rect
-              width="404"
-              height="384"
-              fill="url(#74b3fd99-0a6f-4271-bef2-e80eeafdf357)"
-            />
-          </svg>
-          <svg
-            className="absolute transform -translate-x-32 -translate-y-1/2 top-1/2 right-full"
-            width="404"
-            height="384"
-            fill="none"
-            viewBox="0 0 404 384"
-          >
-            <defs>
-              <pattern
-                id="f210dbf6-a58d-4871-961e-36d5016a0f49"
-                x="0"
-                y="0"
-                width="20"
-                height="20"
-                patternUnits="userSpaceOnUse"
-              >
-                <rect
-                  x="0"
-                  y="0"
-                  width="4"
-                  height="4"
-                  className="text-gray-200"
-                  fill="currentColor"
-                />
-              </pattern>
-            </defs>
-            <rect
-              width="404"
-              height="384"
-              fill="url(#f210dbf6-a58d-4871-961e-36d5016a0f49)"
-            />
-          </svg>
-          <svg
-            className="absolute transform translate-x-32 bottom-12 left-full"
-            width="404"
-            height="384"
-            fill="none"
-            viewBox="0 0 404 384"
-          >
-            <defs>
-              <pattern
-                id="d3eb07ae-5182-43e6-857d-35c643af9034"
-                x="0"
-                y="0"
-                width="20"
-                height="20"
-                patternUnits="userSpaceOnUse"
-              >
-                <rect
-                  x="0"
-                  y="0"
-                  width="4"
-                  height="4"
-                  className="text-gray-200"
-                  fill="currentColor"
-                />
-              </pattern>
-            </defs>
-            <rect
-              width="404"
-              height="384"
-              fill="url(#d3eb07ae-5182-43e6-857d-35c643af9034)"
-            />
-          </svg>
-        </div>
-      </div>
-
-      <div className="-mt-16">
-        <Header>
-          <div className="text-center">
-            {post.tags.map((tag) => (
-              <h1
-                className="text-base font-semibold leading-6 tracking-wide text-indigo-600 uppercase"
-                key={tag}
-              >
-                {tag}
-              </h1>
-            ))}
-            <p className="mt-1 text-4xl font-extrabold leading-10 text-gray-900 sm:text-5xl sm:leading-none sm:tracking-tight lg:text-6xl">
-              {post.title}
-            </p>
-            <p className="max-w-xl mx-auto mt-5 text-xl leading-7 text-gray-500">
-              {post.snippet}
-            </p>
+    <>
+      {!post.published && (
+        <div className="bg-yellow-100 shadow-inner">
+          <div className="max-w-screen-xl px-3 py-3 mx-auto sm:px-6 lg:px-8">
+            <div className="flex flex-wrap items-center justify-between">
+              <div className="flex items-center flex-1 w-0">
+                <span className="flex p-2 bg-yellow-300 rounded-lg">
+                  <svg
+                    className="w-4 h-4 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </span>
+                <p className="ml-3 font-medium text-gray-700 truncate">
+                  <span className="inline">This is a draft post.</span>
+                </p>
+              </div>
+            </div>
           </div>
-        </Header>
-      </div>
-
-      <div className="relative px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto prose prose-lg text-gray-500">
-          <figure>
-            <img
-              className="w-full bg-gray-100 rounded-lg shadow-inner"
-              src={`https://source.unsplash.com/featured/1080x720/?tech,${post.tags}`}
-              alt=""
-              width="1310"
-              height="873"
-            />
-          </figure>
-
-          <ReactMarkdown>{post.content}</ReactMarkdown>
         </div>
+      )}
+
+      <div className="relative py-16 overflow-hidden bg-white">
+        <ContextMenu>
+          <Menu.Item>
+            {({ active }) => (
+              <button
+                className={`${
+                  active ? "bg-gray-100 text-gray-900" : "text-gray-700"
+                } flex justify-between w-full px-4 py-2 text-sm leading-5 text-left`}
+                onClick={post.published ? convertToDraft : publishDraft}
+              >
+                {post.published ? "Convert to draft" : "Publish draft"}
+              </button>
+            )}
+          </Menu.Item>
+        </ContextMenu>
+
+        <Post post={post} />
       </div>
-    </div>
+    </>
   );
 }
