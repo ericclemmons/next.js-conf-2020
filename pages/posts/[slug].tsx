@@ -8,6 +8,7 @@ const placeholderPost = {
     50
   ),
   createdAt: "2020-03-11T00:00:00.000Z",
+  published: true,
   slug: "boost-your-conversion-rate",
   snippet: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint harum rerum voluptatem quo recusandae magni placeat saepe molestiae, sed excepturi cumque corporis perferendis hic.`,
   tags: ["blog"],
