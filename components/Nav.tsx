@@ -6,12 +6,8 @@ export function Nav() {
       <nav className="relative flex items-center justify-between sm:h-10 md:justify-center">
         <div className="flex items-center flex-1 md:absolute md:inset-y-0 md:left-0">
           <div className="flex items-center justify-between w-full md:w-auto">
-            <a href="/" aria-label="Home">
-              <img
-                className="w-auto h-8 sm:h-10"
-                src="https://raw.githubusercontent.com/aws-amplify/aws-amplify.github.io/master/images/Logos/Amplify%20Logo.svg"
-                alt="Logo"
-              />
+            <a className="font-bold text-indigo-500" href="/" aria-label="Home">
+              Home
             </a>
           </div>
         </div>
