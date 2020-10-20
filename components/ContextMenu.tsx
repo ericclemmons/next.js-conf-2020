@@ -1,7 +1,24 @@
 import { Menu, Transition } from "@headlessui/react";
-import { FunctionComponent } from "react";
+import { FunctionComponent, useState } from "react";
 
 export function ContextMenu<FunctionComponent>({ children = null }) {
+  const [user, setUser] = useState(null);
+
+  if (!user) {
+    return (
+      <div className="absolute top-0 right-0 z-10 hidden mt-6 mr-6 md:flex md:visible">
+        <span className="rounded-md shadow">
+          <a
+            className="inline-flex items-center px-4 py-2 text-base font-medium leading-6 text-indigo-600 transition duration-150 ease-in-out bg-white border border-transparent rounded-md hover:text-indigo-500 focus:outline-none focus:border-indigo-300 focus:shadow-outline-indigo active:bg-gray-50 active:text-indigo-700"
+            href="/login"
+          >
+            Log In
+          </a>
+        </span>
+      </div>
+    );
+  }
+
   return (
     <div className="absolute top-0 right-0 z-10 hidden mt-6 mr-6 md:flex md:visible">
       <Menu>
