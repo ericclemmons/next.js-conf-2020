@@ -62,7 +62,34 @@ export function ContextMenu<FunctionComponent>({ children = null }) {
                   </p>
                 </div>
 
-                {children && <div className="py-1">{children}</div>}
+                <div className="py-1">
+                  <Menu.Item>
+                    {({ active }) => (
+                      <a
+                        href="/drafts"
+                        className={`${
+                          active ? "bg-gray-100 text-gray-900" : "text-gray-700"
+                        } flex justify-start w-full px-4 py-2 text-sm leading-5 text-left`}
+                      >
+                        <svg
+                          className="w-5 h-5 mr-2"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                        Create new post
+                      </a>
+                    )}
+                  </Menu.Item>
+
+                  {children}
+                </div>
 
                 <div className="py-1">
                   <Menu.Item>
