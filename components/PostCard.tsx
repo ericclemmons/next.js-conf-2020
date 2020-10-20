@@ -37,7 +37,11 @@ export function PostCard({ post }) {
             </a>
           </p>
           <a
-            href={`/${post.published ? "posts" : "drafts"}/${post.slug}`}
+            href={
+              post.published
+                ? `/posts/${post.slug}`
+                : `/api/preview?slug=${post.slug}`
+            }
             className="block"
           >
             <h3 className="mt-2 text-xl font-semibold leading-7 text-gray-900">
