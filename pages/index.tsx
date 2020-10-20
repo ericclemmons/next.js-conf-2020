@@ -1,7 +1,11 @@
+import { GraphQLResult } from "@aws-amplify/api-graphql";
+import { API } from "aws-amplify";
 import { ContextMenu } from "components/ContextMenu";
 import { Hero } from "components/Hero";
 import { PostCard } from "components/PostCard";
 import { useEffect, useState } from "react";
+import { ListPostsQuery } from "src/API";
+import { listPosts } from "src/graphql/queries";
 
 const placeholderPosts = [
   {
@@ -47,6 +51,14 @@ const placeholderPosts = [
 
 export default function IndexPage() {
   const [posts, setPosts] = useState(placeholderPosts);
+
+  useEffect(() => {
+    const promise = API.graphql({ query: listPosts }) as Promise<
+      GraphQLResult<ListPostsQuery>
+    >;
+
+    promise.then((response) => setPosts(response.data.listPosts.items));
+  }, []);
 
   return (
     <>
