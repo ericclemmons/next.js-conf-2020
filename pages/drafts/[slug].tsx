@@ -1,8 +1,12 @@
-import { kebabCase } from "lodash";
+import { GraphQLResult, GRAPHQL_AUTH_MODE } from "@aws-amplify/api-graphql";
+import { Menu } from "@headlessui/react";
+import { API } from "aws-amplify";
 import { ContextMenu } from "components/ContextMenu";
 import { Header } from "components/Header";
-import { Menu } from "@headlessui/react";
+import { kebabCase } from "lodash";
 import { useRef, useState } from "react";
+import { CreatePostMutation } from "src/API";
+import { createPost } from "src/graphql/mutations";
 
 export default function DraftPage({ post = {} }) {
   const formRef = useRef<HTMLFormElement>(null);
@@ -32,7 +36,23 @@ export default function DraftPage({ post = {} }) {
   function savePost(event) {
     event.preventDefault();
 
-    alert(JSON.stringify(updatedPost));
+    const promise = API.graphql({
+      authMode: GRAPHQL_AUTH_MODE.AMAZON_COGNITO_USER_POOLS,
+      query: createPost,
+      variables: {
+        input: {
+          published: false,
+          ...post,
+          ...updatedPost,
+        },
+      },
+    }) as Promise<GraphQLResult<CreatePostMutation>>;
+
+    promise
+      .then((response) => {
+        window.location.href = `/posts/${response.data.createPost.slug}`;
+      })
+      .catch(console.error);
   }
 
   return (
