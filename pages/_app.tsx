@@ -1,8 +1,7 @@
-import { Footer } from "components/Footer";
-import "../styles/index.css";
-
 import { Amplify } from "aws-amplify";
+import { Footer } from "components/Footer";
 import awsExports from "src/aws-exports";
+import "../styles/index.css";
 
 Amplify.configure(awsExports);
 

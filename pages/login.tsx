@@ -1,6 +1,5 @@
-import { AmplifyAuthenticator, AmplifySignOut } from "@aws-amplify/ui-react";
 import { AuthState, onAuthUIStateChange } from "@aws-amplify/ui-components";
-
+import { AmplifyAuthenticator, AmplifySignOut } from "@aws-amplify/ui-react";
 import { Hero } from "components/Hero";
 import { useEffect } from "react";
 
