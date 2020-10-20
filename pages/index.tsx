@@ -1,6 +1,7 @@
 import { ContextMenu } from "components/ContextMenu";
 import { Hero } from "components/Hero";
 import { PostCard } from "components/PostCard";
+import { useEffect, useState } from "react";
 
 const placeholderPosts = [
   {
@@ -44,7 +45,9 @@ const placeholderPosts = [
   },
 ];
 
-export default function IndexPage({ posts = placeholderPosts }) {
+export default function IndexPage() {
+  const [posts, setPosts] = useState(placeholderPosts);
+
   return (
     <>
       <ContextMenu />
