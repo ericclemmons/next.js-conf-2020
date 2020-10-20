@@ -1,64 +1,55 @@
 import { GraphQLResult } from "@aws-amplify/api-graphql";
-import { API } from "aws-amplify";
+import { Amplify, API, withSSRContext } from "aws-amplify";
 import { ContextMenu } from "components/ContextMenu";
 import { Hero } from "components/Hero";
 import { PostCard } from "components/PostCard";
+import { useUser } from "hooks/useUser";
 import { useEffect, useState } from "react";
 import { ListPostsQuery } from "src/API";
+import awsExports from "src/aws-exports";
 import { listPosts } from "src/graphql/queries";
 
-const placeholderPosts = [
-  {
-    id: "abc1",
-    content: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint harum rerum voluptatem quo recusandae magni placeat saepe molestiae, sed excepturi cumque corporis perferendis hic.`.repeat(
-      50
-    ),
-    createdAt: "2020-03-11T00:00:00.000Z",
-    published: false,
-    slug: "boost-your-conversion-rate",
-    snippet: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint harum rerum voluptatem quo recusandae magni placeat saepe molestiae, sed excepturi cumque corporis perferendis hic.`,
-    tags: ["blog"],
-    title: "Boost your conversion rate",
-    updatedAt: "2020-03-11T00:00:00.000Z",
-  },
-  {
-    id: "abc2",
-    content: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit facilis asperiores porro quaerat doloribus, eveniet dolore. Adipisci tempora aut inventore optio animi., tempore temporibus quo laudantium.`.repeat(
-      50
-    ),
-    createdAt: "2020-05-19T22:56:05.236Z",
-    slug: "how-to-use-search-engine-optimization-to-drive-sales",
-    snippet: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit facilis asperiores porro quaerat doloribus, eveniet dolore. Adipisci tempora aut inventore optio animi., tempore temporibus quo laudantium.`,
-    published: true,
-    tags: ["video"],
-    title: "How to use search engine optimization to drive sales",
-    updatedAt: "2020-05-19T22:56:05.236Z",
-  },
-  {
-    id: "abc3",
-    createdAt: "2020-10-24T22:56:05.236Z",
-    content: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint harum rerum voluptatem quo recusandae magni placeat saepe molestiae, sed excepturi cumque corporis perferendis hic.`.repeat(
-      50
-    ),
-    published: true,
-    slug: "improve-your-customer-experience",
-    snippet: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint harum rerum voluptatem quo recusandae magni placeat saepe molestiae, sed excepturi cumque corporis perferendis hic.`,
-    tags: ["case study"],
-    title: "Improve your customer experience",
-    updatedAt: "2020-10-24T22:56:05.236Z",
-  },
-];
+Amplify.configure({ ...awsExports, ssr: true });
 
-export default function IndexPage() {
-  const [posts, setPosts] = useState(placeholderPosts);
+const publishedFilter = {
+  published: { eq: true },
+};
+
+export async function getStaticProps({ req }) {
+  const SSR = withSSRContext({ req });
+
+  const { data } = await SSR.API.graphql({
+    query: listPosts,
+    variables: {
+      filter: publishedFilter,
+    },
+  });
+
+  return {
+    props: {
+      initialPosts: data.listPosts.items,
+    },
+  };
+}
+
+export default function IndexPage({ initialPosts = [] }) {
+  const user = useUser();
+  const [posts, setPosts] = useState(initialPosts);
 
   useEffect(() => {
-    const promise = API.graphql({ query: listPosts }) as Promise<
-      GraphQLResult<ListPostsQuery>
-    >;
+    if (!user) {
+      return;
+    }
+
+    const promise = API.graphql({
+      query: listPosts,
+      variables: {
+        filter: user ? undefined : publishedFilter,
+      },
+    }) as Promise<GraphQLResult<ListPostsQuery>>;
 
     promise.then((response) => setPosts(response.data.listPosts.items));
-  }, []);
+  }, [user]);
 
   return (
     <>
