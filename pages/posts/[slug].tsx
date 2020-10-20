@@ -134,7 +134,6 @@ export default function PostPage({ post }) {
                   active ? "bg-gray-100 text-gray-900" : "text-gray-700"
                 } flex justify-start w-full px-4 py-2 text-sm leading-5 text-left`}
                 href={`/edit/${post.slug}`}
-                onClick={post.published ? convertToDraft : publishDraft}
               >
                 <svg
                   className="w-5 h-5 mr-2"
