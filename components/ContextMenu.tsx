@@ -46,7 +46,7 @@ export function ContextMenu<FunctionComponent>({ children = null }) {
                 <div className="px-4 py-3">
                   <p className="text-sm leading-5">Signed in as</p>
                   <p className="text-sm font-medium leading-5 text-gray-900 truncate">
-                    tom@example.com
+                    {user.attributes.email}
                   </p>
                 </div>
 
