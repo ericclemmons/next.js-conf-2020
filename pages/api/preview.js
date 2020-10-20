@@ -13,7 +13,14 @@ export default async function preview(req, res) {
     return res.status(401).json(error);
   }
 
+  res.setPreviewData({});
+
   const { slug } = req.query;
+
+  if (!slug) {
+    return res.end("Preview mode enabled");
+  }
+
   const { data } = await SSR.API.graphql({
     query: postsBySlug,
     variables: { slug },
@@ -25,6 +32,5 @@ export default async function preview(req, res) {
     return res.status(404).json({ message: "Post not found" });
   }
 
-  res.setPreviewData({});
   res.redirect(`/posts/${post.slug}`);
 }
