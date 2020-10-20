@@ -8,7 +8,7 @@ export default function Login() {
     return onAuthUIStateChange((state, user) => {
       if (state === AuthState.SignedIn) window.location.href = "/";
     });
-  });
+  }, []);
 
   return (
     <Hero>
