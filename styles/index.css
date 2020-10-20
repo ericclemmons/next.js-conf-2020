@@ -20,6 +20,7 @@
 /* Make <AmplifyAuthenticator> fit nicely in a fly-out panel */
 amplify-authenticator {
   --container-height: auto;
+  --container-justify: center;
   --margin-bottom: 0;
   --min-width: 100%;
   --width: 100%;
