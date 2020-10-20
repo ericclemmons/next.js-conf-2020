@@ -1,6 +1,12 @@
+import { GraphQLResult } from "@aws-amplify/api-graphql";
 import { Menu } from "@headlessui/react";
+import { API } from "aws-amplify";
 import { ContextMenu } from "components/ContextMenu";
 import { Post } from "components/Post";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { PostsBySlugQuery, PostsBySlugQueryVariables } from "src/API";
+import { postsBySlug } from "src/graphql/queries";
 
 const placeholderPost = {
   id: "abc1",
@@ -16,7 +22,25 @@ const placeholderPost = {
   updatedAt: "2020-03-11T00:00:00.000Z",
 };
 
-export default function PostPage({ post = placeholderPost }) {
+export default function PostPage() {
+  const router = useRouter();
+  const [post, setPost] = useState(placeholderPost);
+
+  useEffect(() => {
+    const query = postsBySlug;
+    const variables: PostsBySlugQueryVariables = {
+      slug: router.query.slug,
+    };
+    const promise = API.graphql({ query, variables }) as Promise<
+      GraphQLResult<PostsBySlugQuery>
+    >;
+
+    promise.then((response) => {
+      const [post] = response.data.postsBySlug.items;
+      setPost(post);
+    });
+  }, []);
+
   function publishDraft() {
     alert("TODO");
   }
