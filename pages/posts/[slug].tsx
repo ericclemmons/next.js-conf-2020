@@ -1,4 +1,5 @@
 import { GraphQLResult, GRAPHQL_AUTH_MODE } from "@aws-amplify/api-graphql";
+import Error from "next/error";
 import { Menu } from "@headlessui/react";
 import Amplify, { API, withSSRContext } from "aws-amplify";
 import { ContextMenu } from "components/ContextMenu";
@@ -10,15 +11,17 @@ import { listPosts, postsBySlug } from "src/graphql/queries";
 
 Amplify.configure({ ...awsExports, ssr: true });
 
+const publishedFilter = {
+  published: { eq: true },
+};
+
 export async function getStaticPaths() {
   const SSR = withSSRContext();
 
   const { data } = await SSR.API.graphql({
     query: listPosts,
     variables: {
-      filter: {
-        published: { eq: true },
-      },
+      filter: publishedFilter,
     },
   });
 
@@ -27,23 +30,24 @@ export async function getStaticPaths() {
   }));
 
   return {
-    fallback: false,
+    fallback: true,
     paths,
   };
 }
 
-export async function getStaticProps({ params, req }) {
+export async function getStaticProps({ params, preview = false }) {
   const SSR = withSSRContext();
   const { slug } = params;
 
   const { data } = await SSR.API.graphql({
     query: postsBySlug,
     variables: {
+      filter: preview ? null : publishedFilter,
       slug,
     },
   });
 
-  const [post] = data.postsBySlug.items;
+  const [post = null] = data.postsBySlug.items;
 
   return {
     props: { post },
@@ -93,6 +97,10 @@ export default function PostPage({ post }) {
         window.location.href = `/edit/${response.data.updatePost.slug}`;
       })
       .catch(console.warn);
+  }
+
+  if (!post) {
+    return <Error statusCode={404} />;
   }
 
   return (
