@@ -1,11 +1,17 @@
-import { GraphQLResult } from "@aws-amplify/api-graphql";
+import { GraphQLResult, GRAPHQL_AUTH_MODE } from "@aws-amplify/api-graphql";
 import { Menu } from "@headlessui/react";
 import { API } from "aws-amplify";
 import { ContextMenu } from "components/ContextMenu";
 import { Post } from "components/Post";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { PostsBySlugQuery, PostsBySlugQueryVariables } from "src/API";
+import {
+  PostsBySlugQuery,
+  PostsBySlugQueryVariables,
+  UpdatePostMutation,
+  UpdatePostMutationVariables,
+} from "src/API";
+import { updatePost } from "src/graphql/mutations";
 import { postsBySlug } from "src/graphql/queries";
 
 const placeholderPost = {
@@ -35,18 +41,52 @@ export default function PostPage() {
       GraphQLResult<PostsBySlugQuery>
     >;
 
-    promise.then((response) => {
-      const [post] = response.data.postsBySlug.items;
-      setPost(post);
-    });
-  }, []);
+    promise
+      .then((response) => {
+        const [post] = response.data.postsBySlug.items;
+        setPost(post);
+      })
+      .catch(console.warn);
+  }, [router.query.slug]);
 
   function publishDraft() {
-    alert("TODO");
+    const query = updatePost;
+    const variables: UpdatePostMutationVariables = {
+      input: {
+        id: post.id,
+        published: true,
+      },
+    };
+
+    const promise = API.graphql({
+      authMode: GRAPHQL_AUTH_MODE.AMAZON_COGNITO_USER_POOLS,
+      query,
+      variables,
+    }) as Promise<GraphQLResult<UpdatePostMutation>>;
+
+    promise
+      .then((response) => setPost(response.data.updatePost))
+      .catch(console.warn);
   }
 
   function convertToDraft() {
-    alert("TODO");
+    const query = updatePost;
+    const variables: UpdatePostMutationVariables = {
+      input: {
+        id: post.id,
+        published: false,
+      },
+    };
+
+    const promise = API.graphql({
+      authMode: GRAPHQL_AUTH_MODE.AMAZON_COGNITO_USER_POOLS,
+      query,
+      variables,
+    }) as Promise<GraphQLResult<UpdatePostMutation>>;
+
+    promise
+      .then((response) => setPost(response.data.updatePost))
+      .catch(console.warn);
   }
 
   return (
