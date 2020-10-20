@@ -1,0 +1,11 @@
+{
+    "AppSyncApiName": "nextjsconf2020",
+    "DynamoDBBillingMode": "PAY_PER_REQUEST",
+    "DynamoDBEnableServerSideEncryption": false,
+    "AuthCognitoUserPoolId": {
+        "Fn::GetAtt": [
+            "authnextjsconf202072c94741",
+            "Outputs.UserPoolId"
+        ]
+    }
+}
