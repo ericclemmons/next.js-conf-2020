@@ -1,9 +1,9 @@
 import { AmplifySignOut } from "@aws-amplify/ui-react";
 import { Menu, Transition } from "@headlessui/react";
-import { FunctionComponent, useState } from "react";
+import { useUser } from "hooks/useUser";
 
 export function ContextMenu<FunctionComponent>({ children = null }) {
-  const [user, setUser] = useState(null);
+  const user = useUser();
 
   if (!user) {
     return (
@@ -27,7 +27,18 @@ export function ContextMenu<FunctionComponent>({ children = null }) {
           <>
             <span className="rounded-md shadow">
               <Menu.Button className="inline-flex items-center px-4 py-2 text-base font-medium leading-6 text-indigo-600 transition duration-150 ease-in-out bg-white border border-transparent rounded-md hover:text-indigo-500 focus:outline-none focus:border-indigo-300 focus:shadow-outline-indigo active:bg-gray-50 active:text-indigo-700">
-                <span>Log In</span>
+                <span>Options</span>
+                <svg
+                  className="w-5 h-5 ml-2 -mr-1"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  />
+                </svg>
               </Menu.Button>
             </span>
 
@@ -57,7 +68,6 @@ export function ContextMenu<FunctionComponent>({ children = null }) {
                   <Menu.Item>
                     {({ active }) => (
                       <div
-                        href="#account-settings"
                         className={`${
                           active ? "bg-gray-100 text-gray-900" : "text-gray-700"
                         } flex justify-between w-full px-4 py-2 text-sm leading-5 text-left`}
