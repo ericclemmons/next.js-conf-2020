@@ -1,30 +1,19 @@
 import { ContextMenu } from "components/ContextMenu";
 import { Hero } from "components/Hero";
 import { PostCard } from "components/PostCard";
-import { useUser } from "hooks/useUser";
-import { useEffect, useState } from "react";
 
-export async function getStaticProps({ req }) {
+export async function getStaticProps({ preview, req }) {
   // TODO List posts with `filter` where `published` equals `true`
   return {
     props: {
-      initialPosts: require("fixtures").posts,
+      posts: require("fixtures").posts.filter(
+        (post) => preview || post.published
+      ),
     },
   };
 }
 
-export default function IndexPage({ initialPosts = [] }) {
-  const user = useUser();
-  const [posts, setPosts] = useState(initialPosts);
-
-  useEffect(() => {
-    if (!user) {
-      return;
-    }
-
-    // TODO Fetch *all* posts when logged in
-  }, [user]);
-
+export default function IndexPage({ posts = [] }) {
   return (
     <>
       <ContextMenu />
