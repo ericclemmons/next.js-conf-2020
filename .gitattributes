@@ -1,0 +1,7 @@
+.gitignore linguist-generated=true
+.graphqlconfig.yml linguist-generated=true
+**/*.d.ts linguist-generated=true
+amplify/** linguist-generated=true
+src/aws-exports.js linguist-generated=true
+src/graphql/** linguist-generated=true
+yarn.lock linguist-generated=true
