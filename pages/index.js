@@ -2,13 +2,31 @@ import { ContextMenu } from "components/ContextMenu";
 import { Hero } from "components/Hero";
 import { PostCard } from "components/PostCard";
 
+import { Amplify, withSSRContext } from "aws-amplify";
+import config from "src/aws-exports";
+import { listPosts } from "src/graphql/queries";
+Amplify.configure({ ...config, ssr: true });
+
 export async function getStaticProps({ preview, req }) {
-  // TODO List posts with `filter` where `published` equals `true`
+  const SSR = withSSRContext();
+  const { data } = await SSR.API.graphql({
+    query: listPosts,
+    variables: {
+      filter: preview
+        ? null
+        : {
+            published: {
+              eq: true,
+            },
+          },
+    },
+  });
+
+  const posts = data.listPosts.items;
+
   return {
     props: {
-      posts: require("fixtures").posts.filter(
-        (post) => preview || post.published
-      ),
+      posts,
     },
   };
 }

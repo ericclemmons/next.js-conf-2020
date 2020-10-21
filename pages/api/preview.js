@@ -1,6 +1,13 @@
+import { Amplify, withSSRContext } from "aws-amplify";
+import config from "src/aws-exports";
+import { postsBySlug } from "src/graphql/queries";
+Amplify.configure({ ...config, ssr: true });
+
 export default async function preview(req, res) {
+  const SSR = withSSRContext({ req });
+
   try {
-    console.error("TODO Check session for `Auth.currentAuthenticatedUser()`");
+    await SSR.Auth.currentAuthenticatedUser();
   } catch (error) {
     return res.status(401).json(error);
   }
@@ -13,8 +20,12 @@ export default async function preview(req, res) {
     return res.redirect(302, "/");
   }
 
-  // TODO Fetch posts by `slug` and get first `post`
-  const [post] = require("fixtures").posts.filter((post) => post.slug === slug);
+  const { data } = await SSR.API.graphql({
+    query: postsBySlug,
+    variables: { slug },
+  });
+
+  const [post] = data.postsBySlug.items;
 
   if (!post) {
     return res.status(404).json({ message: "Post not found" });

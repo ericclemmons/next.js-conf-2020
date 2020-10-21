@@ -5,9 +5,25 @@ import { Post } from "components/Post";
 import Error from "next/error";
 import { useRouter } from "next/router";
 
+import { Amplify, withSSRContext } from "aws-amplify";
+import config from "src/aws-exports";
+import { listPosts, postsBySlug } from "src/graphql/queries";
+Amplify.configure({ ...config, ssr: true });
+
 export async function getStaticPaths() {
-  // TODO List posts with `filter` where `published` equals `true`
-  const posts = [];
+  const SSR = withSSRContext();
+  const { data } = await SSR.API.graphql({
+    query: listPosts,
+    variables: {
+      filter: {
+        published: {
+          eq: true,
+        },
+      },
+    },
+  });
+
+  const posts = data.listPosts.items;
 
   const paths = posts.map(({ slug }) => ({
     params: { slug },
@@ -22,9 +38,21 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params, preview = false }) {
   const { slug } = params;
 
-  // TODO Fetch posts by `slug` and get first `post`.
-  // (Filter by `published` if not `preview`)
-  const posts = require("fixtures").posts.filter((post) => post.slug === slug);
+  const SSR = withSSRContext();
+  const { data } = await SSR.API.graphql({
+    query: postsBySlug,
+    variables: {
+      filter: preview
+        ? null
+        : {
+            published: {
+              eq: true,
+            },
+          },
+      slug,
+    },
+  });
+  const posts = data.postsBySlug.items;
   const [post = null] = posts;
 
   return {
