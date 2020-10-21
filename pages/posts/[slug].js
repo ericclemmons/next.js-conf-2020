@@ -1,29 +1,13 @@
 import { Menu } from "@headlessui/react";
-import Amplify, { API, withSSRContext } from "aws-amplify";
 import { ContextMenu } from "components/ContextMenu";
 import { Post } from "components/Post";
 import Error from "next/error";
-import awsExports from "src/aws-exports";
-import { updatePost } from "src/graphql/mutations";
-import { listPosts, postsBySlug } from "src/graphql/queries";
-
-Amplify.configure({ ...awsExports, ssr: true });
-
-const publishedFilter = {
-  published: { eq: true },
-};
 
 export async function getStaticPaths() {
-  const SSR = withSSRContext();
+  // TODO List posts with `filter` where `published` equals `true`
+  const posts = [];
 
-  const { data } = await SSR.API.graphql({
-    query: listPosts,
-    variables: {
-      filter: publishedFilter,
-    },
-  });
-
-  const paths = data.listPosts.items.map(({ slug }) => ({
+  const paths = posts.map(({ slug }) => ({
     params: { slug },
   }));
 
@@ -34,18 +18,10 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params, preview = false }) {
-  const SSR = withSSRContext();
-  const { slug } = params;
-
-  const { data } = await SSR.API.graphql({
-    query: postsBySlug,
-    variables: {
-      filter: preview ? null : publishedFilter,
-      slug,
-    },
-  });
-
-  const [post = null] = data.postsBySlug.items;
+  // TODO Fetch posts by `slug` and get first `post`.
+  // (Filter by `published` if not `preview`)
+  const posts = [];
+  const [post = null] = posts;
 
   return {
     props: { post },

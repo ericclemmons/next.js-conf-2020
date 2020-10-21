@@ -1,33 +1,22 @@
 import { Menu } from "@headlessui/react";
-import { Amplify, API, withSSRContext } from "aws-amplify";
 import { ContextMenu } from "components/ContextMenu";
 import { Header } from "components/Header";
 import { kebabCase } from "lodash";
 import { useRef, useState } from "react";
-import awsExports from "src/aws-exports";
-import { createPost, deletePost, updatePost } from "src/graphql/mutations";
-import { postsBySlug } from "src/graphql/queries";
-
-Amplify.configure({ ...awsExports, ssr: true });
 
 export async function getServerSideProps({ params, req, res }) {
-  const SSR = withSSRContext({ req });
   const { slug } = params;
 
   try {
-    await SSR.Auth.currentAuthenticatedUser();
+    throw new Error("TODO Check session for `Auth.currentAuthenticatedUser()`");
   } catch (error) {
     res.statusCode = 302;
     res.setHeader("location", "/");
     res.end();
   }
 
-  const { data } = await SSR.API.graphql({
-    query: postsBySlug,
-    variables: { slug },
-  });
-
-  const [post] = data.postsBySlug.items;
+  // TODO Fetch posts by `slug` and get first `post`
+  const [post] = [];
 
   if (!post) {
     res.statusCode = 302;
@@ -47,6 +36,7 @@ export default function EditPost({ post }) {
   function handleChange(event) {
     const formData = new FormData(formRef.current);
 
+    // Convert string values into `Post` structure
     setUpdatedPost({
       published: Boolean(formData.get("published")),
       title: String(formData.get("title")).trim(),
@@ -62,15 +52,8 @@ export default function EditPost({ post }) {
 
   function handleDelete() {
     if (confirm("Are you sure?")) {
-      const promise = API.graphql({
-        authMode: "AMAZON_COGNITO_USER_POOLS",
-        query: deletePost,
-        variables: {
-          input: { id: post.id },
-        },
-      });
-
-      promise
+      // TODO Delete post by `post.id`
+      Promise.resolve()
         .then(() => {
           window.location.href = "/";
         })
@@ -81,15 +64,8 @@ export default function EditPost({ post }) {
   function handleSubmit(event) {
     event.preventDefault();
 
-    const promise = API.graphql({
-      authMode: "AMAZON_COGNITO_USER_POOLS",
-      query: post.id ? updatePost : createPost,
-      variables: {
-        input: updatedPost,
-      },
-    });
-
-    promise
+    // TODO If `post.id`, update post. Otherwise create post.
+    Promise.resolve()
       .then((response) => {
         window.location.href = `/api/preview?slug=${response.data.createPost.slug}`;
       })

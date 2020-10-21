@@ -1,31 +1,14 @@
-import { Amplify, API, withSSRContext } from "aws-amplify";
 import { ContextMenu } from "components/ContextMenu";
 import { Hero } from "components/Hero";
 import { PostCard } from "components/PostCard";
 import { useUser } from "hooks/useUser";
 import { useEffect, useState } from "react";
-import awsExports from "src/aws-exports";
-import { listPosts } from "src/graphql/queries";
-
-Amplify.configure({ ...awsExports, ssr: true });
-
-const publishedFilter = {
-  published: { eq: true },
-};
 
 export async function getStaticProps({ req }) {
-  const SSR = withSSRContext({ req });
-
-  const { data } = await SSR.API.graphql({
-    query: listPosts,
-    variables: {
-      filter: publishedFilter,
-    },
-  });
-
+  // TODO List posts with `filter` where `published` equals `true`
   return {
     props: {
-      initialPosts: data.listPosts.items,
+      initialPosts: [],
     },
   };
 }
@@ -39,14 +22,7 @@ export default function IndexPage({ initialPosts = [] }) {
       return;
     }
 
-    const promise = API.graphql({
-      query: listPosts,
-      variables: {
-        filter: user ? undefined : publishedFilter,
-      },
-    });
-
-    promise.then((response) => setPosts(response.data.listPosts.items));
+    // TODO Fetch *all* posts when logged in
   }, [user]);
 
   return (

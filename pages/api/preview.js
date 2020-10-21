@@ -1,14 +1,6 @@
-import { Amplify, withSSRContext } from "aws-amplify";
-import awsExports from "src/aws-exports";
-import { postsBySlug } from "src/graphql/queries";
-
-Amplify.configure({ ...awsExports, ssr: true });
-
 export default async function preview(req, res) {
-  const SSR = withSSRContext({ req });
-
   try {
-    await SSR.Auth.currentAuthenticatedUser();
+    throw new Error("TODO Check session for `Auth.currentAuthenticatedUser()`");
   } catch (error) {
     return res.status(401).json(error);
   }
@@ -21,12 +13,8 @@ export default async function preview(req, res) {
     return res.end("Preview mode enabled");
   }
 
-  const { data } = await SSR.API.graphql({
-    query: postsBySlug,
-    variables: { slug },
-  });
-
-  const [post] = data.postsBySlug.items;
+  // TODO Fetch posts by `slug` and get first `post`
+  const [post] = [];
 
   if (!post) {
     return res.status(404).json({ message: "Post not found" });

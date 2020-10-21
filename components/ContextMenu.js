@@ -1,4 +1,3 @@
-import { AmplifySignOut } from "@aws-amplify/ui-react";
 import { Menu, Transition } from "@headlessui/react";
 import { useUser } from "hooks/useUser";
 
@@ -99,7 +98,8 @@ export function ContextMenu({ children = null }) {
                           active ? "bg-gray-100 text-gray-900" : "text-gray-700"
                         } flex justify-between w-full px-4 py-2 text-sm leading-5 text-left`}
                       >
-                        <AmplifySignOut />
+                        {/* TODO Use AmplifySignOut */}
+                        <button>Sign out</button>
                       </div>
                     )}
                   </Menu.Item>

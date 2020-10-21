@@ -1,14 +1,8 @@
-import { Amplify, withSSRContext } from "aws-amplify";
-import awsExports from "src/aws-exports";
 import EditPost from "./[slug]";
 
-Amplify.configure({ ...awsExports, ssr: true });
-
 export async function getServerSideProps({ params, req, res }) {
-  const SSR = withSSRContext({ req });
-
   try {
-    await SSR.Auth.currentAuthenticatedUser();
+    throw new Error("TODO Check session for `Auth.currentAuthenticatedUser()`");
   } catch (error) {
     res.statusCode = 302;
     res.setHeader("location", "/");
