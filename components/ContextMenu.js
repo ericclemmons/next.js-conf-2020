@@ -2,7 +2,7 @@ import { AmplifySignOut } from "@aws-amplify/ui-react";
 import { Menu, Transition } from "@headlessui/react";
 import { useUser } from "hooks/useUser";
 
-export function ContextMenu<FunctionComponent>({ children = null }) {
+export function ContextMenu({ children = null }) {
   const user = useUser();
 
   if (!user) {

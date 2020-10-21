@@ -1,11 +1,9 @@
-import { GraphQLResult } from "@aws-amplify/api-graphql";
 import { Amplify, API, withSSRContext } from "aws-amplify";
 import { ContextMenu } from "components/ContextMenu";
 import { Hero } from "components/Hero";
 import { PostCard } from "components/PostCard";
 import { useUser } from "hooks/useUser";
 import { useEffect, useState } from "react";
-import { ListPostsQuery } from "src/API";
 import awsExports from "src/aws-exports";
 import { listPosts } from "src/graphql/queries";
 
@@ -46,7 +44,7 @@ export default function IndexPage({ initialPosts = [] }) {
       variables: {
         filter: user ? undefined : publishedFilter,
       },
-    }) as Promise<GraphQLResult<ListPostsQuery>>;
+    });
 
     promise.then((response) => setPosts(response.data.listPosts.items));
   }, [user]);

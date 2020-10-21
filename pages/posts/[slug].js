@@ -1,10 +1,8 @@
-import { GraphQLResult, GRAPHQL_AUTH_MODE } from "@aws-amplify/api-graphql";
-import Error from "next/error";
 import { Menu } from "@headlessui/react";
 import Amplify, { API, withSSRContext } from "aws-amplify";
 import { ContextMenu } from "components/ContextMenu";
 import { Post } from "components/Post";
-import { UpdatePostMutation, UpdatePostMutationVariables } from "src/API";
+import Error from "next/error";
 import awsExports from "src/aws-exports";
 import { updatePost } from "src/graphql/mutations";
 import { listPosts, postsBySlug } from "src/graphql/queries";
@@ -56,21 +54,16 @@ export async function getStaticProps({ params, preview = false }) {
 
 export default function PostPage({ post }) {
   function publishDraft() {
+    const authMode = "AMAZON_COGNITO_USER_POOLS";
     const query = updatePost;
-    const variables: UpdatePostMutationVariables = {
+    const variables = {
       input: {
         id: post.id,
         published: true,
       },
     };
 
-    const promise = API.graphql({
-      authMode: GRAPHQL_AUTH_MODE.AMAZON_COGNITO_USER_POOLS,
-      query,
-      variables,
-    }) as Promise<GraphQLResult<UpdatePostMutation>>;
-
-    promise
+    API.graphql({ authMode, query, variables })
       .then((response) => {
         window.location.href = `/posts/${response.data.updatePost.slug}`;
       })
@@ -78,21 +71,16 @@ export default function PostPage({ post }) {
   }
 
   function convertToDraft() {
+    const authMode = "AMAZON_COGNITO_USER_POOLS";
     const query = updatePost;
-    const variables: UpdatePostMutationVariables = {
+    const variables = {
       input: {
         id: post.id,
         published: false,
       },
     };
 
-    const promise = API.graphql({
-      authMode: GRAPHQL_AUTH_MODE.AMAZON_COGNITO_USER_POOLS,
-      query,
-      variables,
-    }) as Promise<GraphQLResult<UpdatePostMutation>>;
-
-    promise
+    API.graphql({ authMode, query, variables })
       .then((response) => {
         window.location.href = `/edit/${response.data.updatePost.slug}`;
       })

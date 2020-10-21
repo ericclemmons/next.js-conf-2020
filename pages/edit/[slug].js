@@ -1,11 +1,9 @@
-import { GraphQLResult, GRAPHQL_AUTH_MODE } from "@aws-amplify/api-graphql";
 import { Menu } from "@headlessui/react";
 import { Amplify, API, withSSRContext } from "aws-amplify";
 import { ContextMenu } from "components/ContextMenu";
 import { Header } from "components/Header";
 import { kebabCase } from "lodash";
 import { useRef, useState } from "react";
-import { CreatePostMutation, DeletePostMutation } from "src/API";
 import awsExports from "src/aws-exports";
 import { createPost, deletePost, updatePost } from "src/graphql/mutations";
 import { postsBySlug } from "src/graphql/queries";
@@ -43,8 +41,8 @@ export async function getServerSideProps({ params, req, res }) {
 }
 
 export default function EditPost({ post }) {
-  const formRef = useRef<HTMLFormElement>(null);
-  const [updatedPost, setUpdatedPost] = useState<any>(null);
+  const formRef = useRef(null);
+  const [updatedPost, setUpdatedPost] = useState(null);
 
   function handleChange(event) {
     const formData = new FormData(formRef.current);
@@ -65,12 +63,12 @@ export default function EditPost({ post }) {
   function handleDelete() {
     if (confirm("Are you sure?")) {
       const promise = API.graphql({
-        authMode: GRAPHQL_AUTH_MODE.AMAZON_COGNITO_USER_POOLS,
+        authMode: "AMAZON_COGNITO_USER_POOLS",
         query: deletePost,
         variables: {
           input: { id: post.id },
         },
-      }) as Promise<GraphQLResult<DeletePostMutation>>;
+      });
 
       promise
         .then(() => {
@@ -84,12 +82,12 @@ export default function EditPost({ post }) {
     event.preventDefault();
 
     const promise = API.graphql({
-      authMode: GRAPHQL_AUTH_MODE.AMAZON_COGNITO_USER_POOLS,
+      authMode: "AMAZON_COGNITO_USER_POOLS",
       query: post.id ? updatePost : createPost,
       variables: {
         input: updatedPost,
       },
-    }) as Promise<GraphQLResult<CreatePostMutation>>;
+    });
 
     promise
       .then((response) => {
