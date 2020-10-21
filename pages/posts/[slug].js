@@ -1,7 +1,9 @@
 import { Menu } from "@headlessui/react";
 import { ContextMenu } from "components/ContextMenu";
+import { Hero } from "components/Hero";
 import { Post } from "components/Post";
 import Error from "next/error";
+import { useRouter } from "next/router";
 
 export async function getStaticPaths() {
   // TODO List posts with `filter` where `published` equals `true`
@@ -31,6 +33,8 @@ export async function getStaticProps({ params, preview = false }) {
 }
 
 export default function PostPage({ post }) {
+  const router = useRouter();
+
   function publishDraft() {
     // TODO Update post with `published: true` where `id` matches `post.id`
     // (Needs "AMAZON_COGNITO_USER_POOLS")
@@ -49,6 +53,16 @@ export default function PostPage({ post }) {
         window.location.href = `/edit/${response.data.updatePost.slug}`;
       })
       .catch(console.warn);
+  }
+
+  if (router.isFallback) {
+    return (
+      <Hero>
+        <h2 className="mt-3 text-4xl font-extrabold leading-10 tracking-tight text-gray-900 animate-pulse md:mt-5 sm:text-5xl sm:leading-none md:text-6xl">
+          &hellip;
+        </h2>
+      </Hero>
+    );
   }
 
   if (!post) {
