@@ -4,19 +4,30 @@ import { Header } from "components/Header";
 import { kebabCase } from "lodash";
 import { useRef, useState } from "react";
 
+import { Amplify, API, withSSRContext } from "aws-amplify";
+import config from "src/aws-exports";
+import { postsBySlug } from "src/graphql/queries";
+import { createPost, updatePost, deletePost } from "src/graphql/mutations";
+Amplify.configure({ ...config, ssr: true });
+
 export async function getServerSideProps({ params, req, res }) {
   const { slug } = params;
+  const SSR = withSSRContext({ req });
 
   try {
-    console.warn("TODO Check session for `Auth.currentAuthenticatedUser()`");
+    await SSR.Auth.currentAuthenticatedUser();
   } catch (error) {
     res.statusCode = 302;
     res.setHeader("location", "/");
     res.end();
   }
 
-  // TODO Fetch posts by `slug` and get first `post`
-  const [post] = require("fixtures").posts.filter((post) => post.slug === slug);
+  const { data } = await SSR.API.graphql({
+    query: postsBySlug,
+    variables: { slug },
+  });
+
+  const [post] = data.postsBySlug.items;
 
   if (!post) {
     res.statusCode = 302;
@@ -52,8 +63,13 @@ export default function EditPost({ post }) {
 
   function handleDelete() {
     if (confirm("Are you sure?")) {
-      // TODO Delete post by `post.id`
-      Promise.resolve()
+      API.graphql({
+        authMode: "AMAZON_COGNITO_USER_POOLS",
+        query: deletePost,
+        variables: {
+          input: { id: post.id },
+        },
+      })
         .then(() => {
           window.location.href = "/";
         })
@@ -65,15 +81,28 @@ export default function EditPost({ post }) {
     event.preventDefault();
 
     if (post.id) {
-      // TODO Mutate post with `updatedPost` as `input`
-      Promise.resolve(require("fixtures").updatePost)
+      API.graphql({
+        authMode: "AMAZON_COGNITO_USER_POOLS",
+        query: updatePost,
+        variables: {
+          input: {
+            id: post.id,
+            ...updatedPost,
+          },
+        },
+      })
         .then((response) => {
           window.location.href = `/api/preview?slug=${response.data.updatePost.slug}`;
         })
         .catch(console.error);
     } else {
-      // TODO Create post with `updatedPost` as `input`
-      Promise.resolve(require("fixtures").createPost)
+      API.graphql({
+        authMode: "AMAZON_COGNITO_USER_POOLS",
+        query: createPost,
+        variables: {
+          input: updatedPost,
+        },
+      })
         .then((response) => {
           window.location.href = `/api/preview?slug=${response.data.createPost.slug}`;
         })

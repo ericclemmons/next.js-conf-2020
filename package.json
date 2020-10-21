@@ -7,8 +7,10 @@
     "start": "next start"
   },
   "dependencies": {
+    "@aws-amplify/ui-react": "^0.2.24",
     "@headlessui/react": "^0.2.0",
     "@tailwindcss/ui": "^0.6.2",
+    "aws-amplify": "^3.3.4",
     "lodash": "^4.17.20",
     "next": "latest",
     "react": "^16.13.1",

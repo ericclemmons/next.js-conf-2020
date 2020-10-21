@@ -2,6 +2,11 @@ import { Hero } from "components/Hero";
 import { useUser } from "hooks/useUser";
 import { useEffect } from "react";
 
+import { AmplifyAuthenticator, AmplifySignOut } from "@aws-amplify/ui-react";
+import { Amplify } from "aws-amplify";
+import config from "src/aws-exports";
+Amplify.configure({ ...config, ssr: true });
+
 export default function Login() {
   const user = useUser();
 
@@ -11,11 +16,9 @@ export default function Login() {
 
   return (
     <Hero>
-      {/* TODO Replace with AmplifyAuthenticator */}
-      <form>
-        {/* TODO Replace with AmlifySignOut */}
-        <button>TODO: Sign Out</button>
-      </form>
+      <AmplifyAuthenticator>
+        <AmplifySignOut />
+      </AmplifyAuthenticator>
     </Hero>
   );
 }

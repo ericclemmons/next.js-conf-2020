@@ -1,15 +1,20 @@
 import { useEffect, useState } from "react";
+import { Auth, Hub } from "aws-amplify";
 
 export function useUser() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    // TODO Fetch `Auth.currentAuthenticatedUser`
-    Promise.resolve(require("fixtures").user).then(setUser).catch(console.warn);
+    Auth.currentAuthenticatedUser().then(setUser).catch(console.warn);
 
-    // TODO Listen to `Hub` for `auth`'s { payload } for:
-    // - `signIn` `event` (with `data`)
-    // - `signOut` `event`
+    return Hub.listen("auth", ({ payload }) => {
+      switch (payload.event) {
+        case "signIn":
+          return setUser(payload.data);
+        case "signOut":
+          return setUser(null);
+      }
+    });
   }, []);
 
   return user;
