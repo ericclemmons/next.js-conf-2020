@@ -190,6 +190,7 @@ export default function EditPost({ post }) {
                       <div className="flex items-center h-5">
                         <input
                           className="w-4 h-4 text-indigo-600 transition duration-150 ease-in-out form-checkbox"
+                          defaultChecked={post ? post.published : false}
                           name="published"
                           id="published"
                           type="checkbox"
