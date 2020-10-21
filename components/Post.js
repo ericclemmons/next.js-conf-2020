@@ -138,7 +138,7 @@ export function Post({ post }) {
             />
           </figure>
 
-          <ReactMarkdown>{post.content}</ReactMarkdown>
+          <ReactMarkdown escapeHtml={false}>{post.content}</ReactMarkdown>
         </div>
       </div>
     </>

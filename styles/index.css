@@ -8,7 +8,7 @@
 
 /* Write your own custom component styles here */
 .btn-blue {
-  @apply bg-blue-500 text-white font-bold py-2 px-4 rounded;
+  @apply px-4 py-2 font-bold text-white bg-blue-500 rounded;
 }
 
 /* Start purging... */
@@ -16,3 +16,12 @@
 /* Stop purging. */
 
 /* Your own custom utilities */
+
+/* Make <AmplifyAuthenticator> fit nicely in a fly-out panel */
+amplify-authenticator {
+  --container-height: auto;
+  --container-justify: center;
+  --margin-bottom: 0;
+  --min-width: 100%;
+  --width: 100%;
+}

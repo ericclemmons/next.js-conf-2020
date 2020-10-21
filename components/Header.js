@@ -6,7 +6,7 @@ export function Header({ children }) {
       <Nav />
 
       <main className="max-w-screen-xl px-4 mx-auto mt-10 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 xl:mt-28">
-        {children}
+        <div className="text-center">{children}</div>
       </main>
     </div>
   );
