@@ -10,7 +10,7 @@ export default async function preview(req, res) {
   const { slug } = req.query;
 
   if (!slug) {
-    return res.end("Preview mode enabled");
+    return res.redirect(302, "/");
   }
 
   // TODO Fetch posts by `slug` and get first `post`

@@ -6,7 +6,7 @@ export default function Login() {
   const user = useUser();
 
   useEffect(() => {
-    if (user) window.location.href = "/";
+    if (user) window.location.href = "/api/preview";
   }, [user]);
 
   return (
