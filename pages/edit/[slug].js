@@ -8,7 +8,7 @@ export async function getServerSideProps({ params, req, res }) {
   const { slug } = params;
 
   try {
-    throw new Error("TODO Check session for `Auth.currentAuthenticatedUser()`");
+    console.warn("TODO Check session for `Auth.currentAuthenticatedUser()`");
   } catch (error) {
     res.statusCode = 302;
     res.setHeader("location", "/");
@@ -16,7 +16,7 @@ export async function getServerSideProps({ params, req, res }) {
   }
 
   // TODO Fetch posts by `slug` and get first `post`
-  const [post] = [];
+  const [post] = require("fixtures").posts.filter((post) => post.slug === slug);
 
   if (!post) {
     res.statusCode = 302;
@@ -64,12 +64,21 @@ export default function EditPost({ post }) {
   function handleSubmit(event) {
     event.preventDefault();
 
-    // TODO If `post.id`, update post. Otherwise create post.
-    Promise.resolve()
-      .then((response) => {
-        window.location.href = `/api/preview?slug=${response.data.createPost.slug}`;
-      })
-      .catch(console.error);
+    if (post.id) {
+      // TODO Mutate post with `updatedPost` as `input`
+      Promise.resolve(require("fixtures").updatePost)
+        .then((response) => {
+          window.location.href = `/api/preview?slug=${response.data.updatePost.slug}`;
+        })
+        .catch(console.error);
+    } else {
+      // TODO Create post with `updatedPost` as `input`
+      Promise.resolve(require("fixtures").createPost)
+        .then((response) => {
+          window.location.href = `/api/preview?slug=${response.data.createPost.slug}`;
+        })
+        .catch(console.error);
+    }
   }
 
   return (

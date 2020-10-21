@@ -5,7 +5,9 @@ export function useUser() {
 
   useEffect(() => {
     // TODO Fetch `Auth.currentAuthenticatedUser`
-    // TODO `Hub.listen` to `auth`'s { payload } for:
+    Promise.resolve(require("fixtures").user).then(setUser).catch(console.warn);
+
+    // TODO Listen to `Hub` for `auth`'s { payload } for:
     // - `signIn` `event` (with `data`)
     // - `signOut` `event`
   }, []);

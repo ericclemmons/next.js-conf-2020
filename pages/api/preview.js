@@ -1,6 +1,6 @@
 export default async function preview(req, res) {
   try {
-    throw new Error("TODO Check session for `Auth.currentAuthenticatedUser()`");
+    console.error("TODO Check session for `Auth.currentAuthenticatedUser()`");
   } catch (error) {
     return res.status(401).json(error);
   }
@@ -14,7 +14,7 @@ export default async function preview(req, res) {
   }
 
   // TODO Fetch posts by `slug` and get first `post`
-  const [post] = [];
+  const [post] = require("fixtures").posts.filter((post) => post.slug === slug);
 
   if (!post) {
     return res.status(404).json({ message: "Post not found" });

@@ -2,7 +2,7 @@ import EditPost from "./[slug]";
 
 export async function getServerSideProps({ params, req, res }) {
   try {
-    throw new Error("TODO Check session for `Auth.currentAuthenticatedUser()`");
+    console.error("TODO Check session for `Auth.currentAuthenticatedUser()`");
   } catch (error) {
     res.statusCode = 302;
     res.setHeader("location", "/");

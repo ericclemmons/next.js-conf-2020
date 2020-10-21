@@ -18,9 +18,11 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params, preview = false }) {
+  const { slug } = params;
+
   // TODO Fetch posts by `slug` and get first `post`.
   // (Filter by `published` if not `preview`)
-  const posts = [];
+  const posts = require("fixtures").posts.filter((post) => post.slug === slug);
   const [post = null] = posts;
 
   return {
@@ -30,16 +32,9 @@ export async function getStaticProps({ params, preview = false }) {
 
 export default function PostPage({ post }) {
   function publishDraft() {
-    const authMode = "AMAZON_COGNITO_USER_POOLS";
-    const query = updatePost;
-    const variables = {
-      input: {
-        id: post.id,
-        published: true,
-      },
-    };
-
-    API.graphql({ authMode, query, variables })
+    // TODO Update post with `published: true` where `id` matches `post.id`
+    // (Needs "AMAZON_COGNITO_USER_POOLS")
+    Promise.resolve(require("fixtures").updatePost)
       .then((response) => {
         window.location.href = `/posts/${response.data.updatePost.slug}`;
       })
@@ -47,16 +42,9 @@ export default function PostPage({ post }) {
   }
 
   function convertToDraft() {
-    const authMode = "AMAZON_COGNITO_USER_POOLS";
-    const query = updatePost;
-    const variables = {
-      input: {
-        id: post.id,
-        published: false,
-      },
-    };
-
-    API.graphql({ authMode, query, variables })
+    // TODO Update post with `published: false` where `id` matches `post.id`
+    // (Needs "AMAZON_COGNITO_USER_POOLS")
+    Promise.resolve(require("fixtures").updatePost)
       .then((response) => {
         window.location.href = `/edit/${response.data.updatePost.slug}`;
       })

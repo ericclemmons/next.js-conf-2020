@@ -8,7 +8,7 @@ export async function getStaticProps({ req }) {
   // TODO List posts with `filter` where `published` equals `true`
   return {
     props: {
-      initialPosts: [],
+      initialPosts: require("fixtures").posts,
     },
   };
 }
