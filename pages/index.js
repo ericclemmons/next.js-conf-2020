@@ -89,7 +89,7 @@ export default function IndexPage({ initialPosts = [] }) {
               Trying to share what I've learned, as time allows.
             </p>
           </div>
-          <div className="grid max-w-lg gap-5 mx-auto mt-12 lg:grid-cols-3 lg:max-w-none">
+          <div className="grid max-w-lg gap-5 mx-auto mt-12 md:grid-cols-3 md:max-w-none">
             {posts.map((post) => (
               <PostCard key={post.id} post={post} />
             ))}
