@@ -1,4 +1,5 @@
 import { Header } from "components/Header";
+import Image from "next/image";
 import ReactMarkdown from "react-markdown";
 
 export function Post({ post }) {
@@ -129,7 +130,7 @@ export function Post({ post }) {
       <div className="relative px-4 sm:px-6 lg:px-8">
         <div className="mx-auto prose prose-lg text-gray-500">
           <figure>
-            <img
+            <Image
               className="w-full bg-gray-100 rounded-lg shadow-inner"
               src={`https://source.unsplash.com/featured/1080x720/?tech,${post.tags}`}
               alt=""

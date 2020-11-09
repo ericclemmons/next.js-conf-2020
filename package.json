@@ -12,15 +12,15 @@
     "@tailwindcss/ui": "^0.6.2",
     "aws-amplify": "^3.3.4",
     "lodash": "^4.17.20",
-    "next": "latest",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
+    "next": "10.0.0",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
     "react-markdown": "^4.3.1"
   },
   "devDependencies": {
     "postcss-flexbugs-fixes": "4.2.1",
     "postcss-preset-env": "^6.7.0",
-    "tailwindcss": "^1.9.4"
+    "tailwindcss": "^1.9.6"
   },
   "license": "MIT"
 }
